@@ -1,0 +1,671 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Happy Birthday, Daniel!</title>
+
+    <style>
+
+        /* GENERAL SETTINGS */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: #fff5f3;
+            color: #651b26;
+            overflow-x: hidden;
+        }
+
+        /* OPENING SECTION */
+
+        .opening {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+
+            background: linear-gradient(
+                145deg,
+                #fff1ed,
+                #fbd8d5
+            );
+        }
+
+        .small-text {
+            letter-spacing: 6px;
+            font-size: 12px;
+            color: #9d4550;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: clamp(38px, 8vw, 65px);
+            color: #a51f32;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #91545a;
+            margin-bottom: 60px;
+        }
+
+        /* ENVELOPE CONTAINER */
+
+        .envelope-container {
+            position: relative;
+            width: 290px;
+            height: 195px;
+            perspective: 1000px;
+            margin-bottom: 45px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* ENVELOPE BODY */
+
+        .envelope {
+            position: absolute;
+            inset: 0;
+            background: #a91e35;
+            border-radius: 6px;
+            box-shadow: 0 15px 30px #72202d35;
+        }
+
+        /* LETTER INSIDE ENVELOPE */
+
+        .letter-preview {
+            position: absolute;
+            width: 85%;
+            height: 90%;
+            left: 7.5%;
+            bottom: 5px;
+
+            background: #fffaf0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #a51f32;
+            font-size: 23px;
+            font-style: italic;
+
+            z-index: 2;
+
+            transition:
+                transform 1s ease,
+                height 1s ease;
+        }
+
+        /* FRONT PART OF ENVELOPE */
+
+        .envelope-front {
+            position: absolute;
+            inset: 0;
+
+            background: #bd3047;
+
+            clip-path: polygon(
+                0 0,
+                50% 56%,
+                100% 0,
+                100% 100%,
+                0 100%
+            );
+
+            z-index: 3;
+        }
+
+        /* TRIANGULAR FLAP */
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: #85172b;
+
+            clip-path: polygon(
+                0 0,
+                100% 0,
+                50% 58%
+            );
+
+            transform-origin: top center;
+            transform: rotateX(0deg);
+
+            transition: transform 0.9s ease;
+
+            z-index: 4;
+        }
+
+        /* HEART SEAL */
+
+        .seal {
+            position: absolute;
+
+            width: 48px;
+            height: 48px;
+
+            background: #e6a0a0;
+            border: 2px solid #f9d9d1;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+            color: #8b162b;
+
+            top: 43%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            z-index: 5;
+
+            transition: opacity 0.4s ease;
+        }
+
+        /* ENVELOPE OPENING ANIMATION */
+
+        .envelope-container.open {
+            animation: none;
+        }
+
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-container.open .letter-preview {
+            transform: translateY(-125px);
+        }
+
+        .envelope-container.open .seal {
+            opacity: 0;
+        }
+
+        /* BUTTON */
+
+        button {
+            border: none;
+            background: #a51f32;
+            color: white;
+
+            padding: 15px 35px;
+            border-radius: 35px;
+
+            font-size: 14px;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            font-family: Arial, sans-serif;
+        }
+
+        button:hover {
+            background: #771528;
+            transform: translateY(-3px);
+        }
+
+        button:disabled {
+            cursor: default;
+        }
+
+        .scroll-hint {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #9b555d;
+
+            opacity: 0;
+            transition: opacity 0.7s;
+        }
+
+        .scroll-hint.show {
+            opacity: 1;
+        }
+
+        /* MESSAGE SECTION */
+
+        .message-section {
+            min-height: 100vh;
+
+            padding: 100px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #fffaf5;
+        }
+
+        /* LETTER PAPER */
+
+        .letter-paper {
+            max-width: 650px;
+            width: 100%;
+
+            padding: 55px 45px;
+
+            background: #ffffff;
+
+            border: 1px solid #f0d6d2;
+
+            box-shadow: 0 10px 35px #7d293015;
+
+            line-height: 2;
+
+            opacity: 0;
+            transform: translateY(35px);
+
+            transition: 1s ease;
+        }
+
+        .letter-paper.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-paper h2 {
+            text-align: center;
+
+            color: #a51f32;
+
+            font-size: 30px;
+
+            margin-bottom: 35px;
+        }
+
+        .letter-paper p {
+            margin-bottom: 22px;
+
+            font-size: 16px;
+
+            color: #65434a;
+        }
+
+        .letter-paper .signature {
+            text-align: right;
+            margin-top: 40px;
+
+            font-style: italic;
+            color: #a51f32;
+        }
+
+        /* FINAL SECTION */
+
+        .final-section {
+            min-height: 100vh;
+
+            padding: 90px 20px;
+
+            background: linear-gradient(
+                145deg,
+                #7d1428,
+                #b82c43
+            );
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            color: #fff5f0;
+        }
+
+        .final-section h2 {
+            font-size: 38px;
+            margin-bottom: 20px;
+            color: #fff1e9;
+        }
+
+        .final-section p {
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        /* YOUR STICKER */
+
+        .sticker {
+            width: 230px;
+            height: 230px;
+
+            object-fit: contain;
+
+            margin: 25px 0;
+        }
+
+        .final-greeting {
+            margin-top: 20px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 25px;
+
+            text-align: center;
+
+            background: #651323;
+            color: #f9d9d9;
+
+            font-size: 12px;
+            letter-spacing: 3px;
+        }
+
+        /* MOBILE RESPONSIVENESS */
+
+        @media (max-width: 500px) {
+
+            .envelope-container {
+                width: 270px;
+                height: 180px;
+            }
+
+            .letter-paper {
+                padding: 35px 25px;
+            }
+
+            .letter-paper h2 {
+                font-size: 25px;
+            }
+
+            .letter-paper p {
+                font-size: 15px;
+            }
+
+            .final-section h2 {
+                font-size: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- OPENING SCREEN -->
+
+    <section class="opening">
+
+        <p class="small-text">
+            A LITTLE SOMETHING FOR YOU
+        </p>
+
+        <h1>Happy Birthday, Daniel!</h1>
+
+        <p class="subtitle">
+            Someone has prepared a little surprise for you.
+        </p>
+
+
+        <!-- ENVELOPE -->
+
+        <div class="envelope-container" id="envelope">
+
+            <div class="envelope">
+
+                <div class="letter-preview">
+                    A letter for you.
+                </div>
+
+                <div class="envelope-front"></div>
+
+                <div class="envelope-flap"></div>
+
+                <div class="seal">
+                    ♥
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OPEN BUTTON -->
+
+        <button id="openButton" onclick="openLetter()">
+            OPEN YOUR LETTER
+        </button>
+
+        <p class="scroll-hint" id="scrollHint">
+            ↓ Scroll down to read your message ↓
+        </p>
+
+    </section>
+
+
+
+    <!-- BIRTHDAY MESSAGE -->
+
+    <section class="message-section" id="message">
+
+        <div class="letter-paper" id="letterPaper">
+
+
+            <p>
+                Dear, Daniel. 
+            </p>
+
+            <p>
+                First, I just want to say Happy Birthday! I hope this day is filled with love, laughter,
+                 and all the things that bring you joy.
+            </p>
+
+            <p>
+                Almost a week ago, it was my birthday. You made it a little more special than my previous birthdays,
+                 and I want you to know how thankful I am that I met you, even if you're so makulit! I'm genuinely 
+                 grateful for your presence because you're one of the people who helped make my birthday blues go 
+                 away.
+            </p>
+
+            <p>
+                I'm thankful for the relationship we've built and for the beautiful friendship we share. 
+                It was the first time I didn't cry on my birthday, and I want you to know that you were one 
+                of the reasons why.
+            </p>
+
+            <p> 
+                Today is your birthday, and I hope you'll have a wonderful day. I hope you'll be surrounded by 
+                love and happiness, and that all your birthday wishes come true. I hope you never let the opinions 
+                of people who don't appreciate your efforts discourage you. I wish you success and happiness in 
+                everything you do. May you continue to grow, achieve your dreams, and get closer to your goals 
+                this year
+            </p>
+
+            <p>
+                Enjoy your special day, Daniel! You deserve all the love and happiness in the world.
+            </p>
+
+            <p class="signature">
+                With love,<br>
+                Someone who wishes you well. <br>
+                Cha.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FINAL SECTION -->
+
+    <section class="final-section">
+
+        <h2>One Last Thing...</h2>
+
+        <p>
+            Here's a little something to make
+            your day even more special.
+        </p>
+
+        <p> 
+            my favorite memory of us, for now...
+        </p>
+
+
+        <!-- PLACE YOUR STICKER HERE -->
+
+        <img
+            src="C:\Users\Chrisha Mae Sanchez\Downloads\Screenshot_2026-10-31_085618-removebg-preview.png"
+            alt="Birthday sticker"
+            class="sticker"
+        >
+
+
+        <h2>Happy Birthday Again!</h2>
+
+        <p class="final-greeting">
+            Wishing you nothing but the best. ♥
+        </p>
+
+    </section>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        MADE WITH LOVE ♥
+
+    </footer>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        // OPEN ENVELOPE
+
+        function openLetter() {
+
+            const envelope =
+                document.getElementById("envelope");
+
+            const button =
+                document.getElementById("openButton");
+
+            const hint =
+                document.getElementById("scrollHint");
+
+
+            // Prevent opening multiple times
+
+            if (envelope.classList.contains("open")) {
+                return;
+            }
+
+
+            // Play envelope animation
+
+            envelope.classList.add("open");
+
+
+            // Change button text
+
+            button.innerText = "LETTER OPENED";
+
+            button.disabled = true;
+
+            button.style.opacity = "0.6";
+
+
+            // Show scroll instruction
+
+            setTimeout(function() {
+
+                hint.classList.add("show");
+
+            }, 1000);
+
+
+            // Automatically scroll to birthday message
+
+            setTimeout(function() {
+
+                document.getElementById("message").scrollIntoView({
+                    behavior: "smooth"
+                });
+
+            }, 1800);
+
+        }
+
+
+
+        // REVEAL LETTER WHEN SCROLLED INTO VIEW
+
+        const observer = new IntersectionObserver(
+
+            function(entries) {
+
+                entries.forEach(function(entry) {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add("visible");
+
+                    }
+
+                });
+
+            },
+
+            {
+                threshold: 0.2
+            }
+
+        );
+
+
+        observer.observe(
+            document.getElementById("letterPaper")
+        );
+
+    </script>
+
+</body>
+
+</html>
